@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 
 const messageIdOptionName = "message-id";
 const badWordOptionName = "bad-word";

@@ -1,4 +1,4 @@
-import { REST, Routes, Client, Collection } from "discord.js";
+import { REST, Routes, Client, Collection, GatewayIntentBits, Events } from "discord.js";
 import AssignCommand from "./commands/assign.js";
 import CuteifyCommand from "./commands/cuteify.js";
 import UncuteifyCommand from "./commands/uncuteify.js";
@@ -10,11 +10,11 @@ import GoodbyeUser from "./commands/goodbye.js";
 import { blacklistMessageCreate, blacklistMessageUpdate } from "./commands/blacklist.js";
 
 const client = new Client({ intents: [
-  1, //GatewayIntentBits.Guilds,
-  2, //GatewayIntentBits.GuildMembers,
-  512, //GatewayIntentBits.GuildMessages,
-  4096, //GatewayIntentBits.DirectMessages,
-  32768, //GatewayIntentBits.MessageContent
+  GatewayIntentBits.Guilds,
+  GatewayIntentBits.GuildMembers,
+  GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.DirectMessages,
+  GatewayIntentBits.MessageContent
 ]});
 
 let commands = [AssignCommand, EditCommand, CuteifyCommand, UncuteifyCommand, PingCommand, SpankCommand];
@@ -22,9 +22,9 @@ let commands = [AssignCommand, EditCommand, CuteifyCommand, UncuteifyCommand, Pi
 client.commands = new Collection();
 for (let cmd of commands) client.commands.set(cmd.data.name, cmd);
 
-client.once("ready", () => console.log(`Client logged in as ${client.user.tag}`));
+client.once(Events.ClientReady, () => console.log(`Client logged in as ${client.user.tag}`));
 
-client.on("interactionCreate", async interaction => {
+client.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isChatInputCommand()) return;
   
   const command = client.commands.get(interaction.commandName);
@@ -47,25 +47,25 @@ client.on("interactionCreate", async interaction => {
   }
 });
 
-client.on("messageCreate", async(...args) => {
+client.on(Events.MessageCreate, async(...args) => {
   await blacklistMessageCreate(client, ...args);
 });
 
-client.on("messageUpdate", async(...args) => {
+client.on(Events.MessageUpdate, async(...args) => {
   await blacklistMessageUpdate(client, ...args);
 });
 
-client.on("guildMemberAdd", (member) => {
+client.on(Events.GuildMemberAdd, (member) => {
   console.log(`${member.user.username} joined.`);
 });
 
-client.on("guildMemberUpdate", async (oldMember, newMember) => {
+client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
   if (oldMember.pending && !newMember.pending) {
     await WelcomeUser(client, newMember);
   }
 });
 
-client.on("guildMemberRemove", (member) => {
+client.on(Events.GuildMemberRemove, (member) => {
   console.log("on GuildMemberRemove");
   GoodbyeUser(client, member);
 });

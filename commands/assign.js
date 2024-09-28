@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 
 const firstNameOptionName = "first-name";
 const lastNameOptionName = "last-name";
