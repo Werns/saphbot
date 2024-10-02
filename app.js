@@ -10,6 +10,11 @@ import WelcomeUser from "./commands/welcome.js";
 import GoodbyeUser from "./commands/goodbye.js";
 import { blacklistMessageCreate, blacklistMessageUpdate } from "./commands/blacklist.js";
 
+console.log(`process.env.DISCORD_TOKEN = ${process.env.DISCORD_TOKEN}`)
+console.log(`process.env.APPLICATION_ID = ${process.env.APPLICATION_ID}`)
+console.log(`process.env.GUILD_ID = ${process.env.GUILD_ID}`)
+console.log(`process.env.PUBLIC_KEY = ${process.env.PUBLIC_KEY}`)
+
 const client = new Client({ intents: [
   GatewayIntentBits.Guilds,
   GatewayIntentBits.GuildMembers,
