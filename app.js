@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { REST, Routes, Client, Collection, GatewayIntentBits, Events } from "discord.js";
 import AssignCommand from "./commands/assign.js";
 import CuteifyCommand from "./commands/cuteify.js";
