@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { REST, Routes, Client, Collection, GatewayIntentBits, Events } from "discord.js";
+import { REST, Routes, Client, Collection, GatewayIntentBits, Events, PresenceUpdateStatus } from "discord.js";
 import AssignCommand from "./commands/assign.js";
 import CuteifyCommand from "./commands/cuteify.js";
 import UncuteifyCommand from "./commands/uncuteify.js";
@@ -73,9 +73,9 @@ client.on(Events.PresenceUpdate, (oldPresence, newPresence) => {
   const securityCamsChannelId = "1082100597513269248";
   const securityCattoBotId = "1093039910874791997";
 
-  if (newPresence.userId.toLowerCase() == securityCattoBotId) {
-    if (oldPresence) console.log(`oldPresence: ${oldPresence.status} - ${oldPresence.clientStatus}`);
-    console.log(`newPresence: ${newPresence.status} - ${newPresence.clientStatus}`);
+  if (newPresence.userId.toLowerCase() == securityCattoBotId && newPresence.status == PresenceUpdateStatus.Offline) {
+    let securityCamsChannel = client.channels.cache.get(securityCamsChannelId);
+    securityCamsChannel.send(`Security Catto has gone offline!`);
   }
 });
 
