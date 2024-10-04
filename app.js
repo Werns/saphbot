@@ -70,9 +70,10 @@ client.on(Events.GuildMemberRemove, (member) => {
 });
 
 client.on(Events.PresenceUpdate, (oldPresence, newPresence) => {
-  console.log(`PresenceUpdate for user: ${newPresence.user?.displayName ?? newPresence.user?.username} - ${newPresence.userId}`);
+  const securityCamsChannelId = "1082100597513269248";
+  const securityCattoBotId = "1093039910874791997";
 
-  if (newPresence.userId.toLowerCase() == "1093051260254560320") { // ffxivBridgeWorkerUserId
+  if (newPresence.userId.toLowerCase() == securityCattoBotId) {
     if (oldPresence) console.log(`oldPresence: ${oldPresence.status} - ${oldPresence.clientStatus}`);
     console.log(`newPresence: ${newPresence.status} - ${newPresence.clientStatus}`);
   }
