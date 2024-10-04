@@ -70,7 +70,7 @@ client.on(Events.GuildMemberRemove, (member) => {
 });
 
 client.on(Events.PresenceUpdate, (oldPresence, newPresence) => {
-  console.log(`PresenceUpdate for user: ${newPresence.user?.name} - ${newPresence.userId}`);
+  console.log(`PresenceUpdate for user: ${newPresence.user?.displayName ?? newPresence.user?.username} - ${newPresence.userId}`);
 
   if (newPresence.userId.toLowerCase() == "1093051260254560320") { // ffxivBridgeWorkerUserId
     if (oldPresence) console.log(`oldPresence: ${oldPresence.status} - ${oldPresence.clientStatus}`);
