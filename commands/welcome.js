@@ -1,12 +1,9 @@
 export default async function WelcomeUser(client, member) {
-    console.log(`Welcome ${member.user.username}`);
-    
     let initialRoles = ["Newbie"];
     
     for (let roleName of initialRoles) {
       var foundRole = member.guild.roles.cache.find(role => role.name === roleName);
       member.roles.add(foundRole).catch(console.error);
-      console.log(`Added role: ${foundRole.name}`);
     }
     
     await new Promise(r => setTimeout(r, 2000));

@@ -16,6 +16,7 @@ const client = new Client({ intents: [
   GatewayIntentBits.Guilds,
   GatewayIntentBits.GuildMembers,
   GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.GuildPresences,
   GatewayIntentBits.DirectMessages,
   GatewayIntentBits.MessageContent
 ]});
@@ -58,10 +59,6 @@ client.on(Events.MessageUpdate, async(...args) => {
   await blacklistMessageUpdate(client, ...args);
 });
 
-client.on(Events.GuildMemberAdd, (member) => {
-  console.log(`${member.user.username} joined.`);
-});
-
 client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
   if (oldMember.pending && !newMember.pending) {
     await WelcomeUser(client, newMember);
@@ -69,8 +66,14 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 });
 
 client.on(Events.GuildMemberRemove, (member) => {
-  console.log("on GuildMemberRemove");
   GoodbyeUser(client, member);
+});
+
+client.on(Events.PresenceUpdate, (oldPresence, newPresence) => {
+  if (oldPresence.userId.toLowerCase() == "1093051260254560320") { // ffxivBridgeWorkerUserId
+    console.log(`oldPresence: ${oldPresence.status} - ${oldPresence.clientStatus}`);
+    console.log(`newPresence: ${newPresence.status} - ${newPresence.clientStatus}`);
+  }
 });
 
 const guildCommands = commands.map((cmd) => cmd.data.toJSON());
