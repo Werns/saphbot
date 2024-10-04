@@ -74,8 +74,9 @@ client.on(Events.PresenceUpdate, (oldPresence, newPresence) => {
   const securityCattoBotId = "1093039910874791997";
 
   if (newPresence.userId.toLowerCase() == securityCattoBotId && newPresence.status == PresenceUpdateStatus.Offline) {
+    let me = client.users.cache.get("114463729218748424");
     let securityCamsChannel = client.channels.cache.get(securityCamsChannelId);
-    securityCamsChannel.send(`Security Catto has gone offline!`);
+    securityCamsChannel.send(`${me.toString()}, Security Catto has gone offline!`);
   }
 });
 
