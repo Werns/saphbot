@@ -1,3 +1,5 @@
+import { Client, OmitPartialGroupDMChannel, Message, PartialMessage } from "discord.js";
+
 export const BANNED_WORDS = [
     "nigger",
     "nigga",
@@ -16,19 +18,32 @@ export const BANNED_WORDS = [
     "1118214657610633327" // other-fem+anything
   ];
   
+  /**
+   * @param {Client} client
+   * @param {OmitPartialGroupDMChannel<Message<boolean>>} message
+   */
   export async function blacklistMessageCreate(client, message) {
-    let reportLogChannel = client.channels.cache.get('1162638491759415376');
-    await checkMessageContent(client, message, reportLogChannel);
-    await checkMessageChannel(client, message, reportLogChannel);
+    await checkMessageContent(client, message);
+    await checkMessageChannel(client, message);
   }
   
+  /**
+   * @param {Client} client
+   * @param {Message<boolean> | PartialMessage} oldMessage
+   * @param {Message<boolean> | PartialMessage} newMessage
+   */
   export async function blacklistMessageUpdate(client, oldMessage, newMessage) {
-    let reportLogChannel = client.channels.cache.get('1162638491759415376');
-    await checkMessageContent(client, newMessage, reportLogChannel);
+    await checkMessageContent(client, newMessage);
   }
   
-  async function checkMessageContent(client, message, reportLogChannel) {
+  /**
+   * @param {Client} client
+   * @param {OmitPartialGroupDMChannel<Message<boolean>> | Message<boolean> | PartialMessage} message
+   */
+  async function checkMessageContent(client, message) {
     if (message.author.bot) return false;
+
+    let reportLogChannel = client.channels.cache.get('1162638491759415376');
     
     for (let badWord of BANNED_WORDS) {
       if (message.content.toLowerCase().includes(badWord.toLowerCase())) {
@@ -42,9 +57,15 @@ export const BANNED_WORDS = [
       }
     }
   }
-  
+
+  /**
+   * @param {Client} client
+   * @param {OmitPartialGroupDMChannel<Message<boolean>>} message
+   */
   async function checkMessageChannel(client, message, reportLogChannel) {
     if (message.author.bot) return false;
+
+    let reportLogChannel = client.channels.cache.get('1162638491759415376');
     
     if (BANNED_CHANNELS.includes(message.channelId.toString())) {
       if (message.attachments.size < 1 && message.embeds.length < 1 && !message.hasThread && !message.content.toLocaleLowerCase().includes("http")) {

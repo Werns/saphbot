@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { REST, Routes, Client, Collection, GatewayIntentBits, Events, PresenceUpdateStatus } from "discord.js";
+import { REST, Routes, Client, Collection, GatewayIntentBits, Events } from "discord.js";
 import AssignCommand from "./commands/assign.js";
 import CuteifyCommand from "./commands/cuteify.js";
 import UncuteifyCommand from "./commands/uncuteify.js";
@@ -8,6 +8,7 @@ import PingCommand from "./commands/ping.js";
 import SpankCommand from "./commands/spank.js";
 import WelcomeUser from "./commands/welcome.js";
 import GoodbyeUser from "./commands/goodbye.js";
+import monitorSecurityCattoPresence from './commands/securityCattoMonitoring.js';
 import { blacklistMessageCreate, blacklistMessageUpdate } from "./commands/blacklist.js";
 
 console.log("Starting SaphBot");
@@ -70,14 +71,7 @@ client.on(Events.GuildMemberRemove, (member) => {
 });
 
 client.on(Events.PresenceUpdate, (oldPresence, newPresence) => {
-  const securityCamsChannelId = "1082100597513269248";
-  const securityCattoBotId = "1093039910874791997";
-
-  if (newPresence.userId.toLowerCase() == securityCattoBotId && newPresence.status == PresenceUpdateStatus.Offline) {
-    let me = client.users.cache.get("114463729218748424");
-    let securityCamsChannel = client.channels.cache.get(securityCamsChannelId);
-    securityCamsChannel.send(`${me.toString()}, Security Catto has gone offline!`);
-  }
+  monitorSecurityCattoPresence(client, newPresence);
 });
 
 const guildCommands = commands.map((cmd) => cmd.data.toJSON());

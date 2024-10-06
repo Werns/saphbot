@@ -1,9 +1,13 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, Client, Interaction } from "discord.js";
 
 let UncuteifyCommand = {
   data: new SlashCommandBuilder()
-  .setName("uncuteify")
-  .setDescription('Remove the super cutie pants role from yourself'),
+    .setName("uncuteify")
+    .setDescription('Remove the super cutie pants role from yourself'),
+  /**
+   * @param {Interaction} interaction
+   * @param {Client} client
+   */
   execute: async(interaction, client) => {
     var cuteRole = interaction.member.guild.roles.cache.find(role => role.name === "CERTIFIED CUTIE PANTS");
     

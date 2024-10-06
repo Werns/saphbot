@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, Client, Interaction } from "discord.js";
 
 const otherUserOptionName = "other-user";
 
@@ -11,6 +11,10 @@ let CuteifyCommand = {
     .setDescription("The user to cuteify")
     .setRequired(true)
   ),
+  /**
+   * @param {Interaction} interaction
+   * @param {Client} client
+   */
   execute: async(interaction, client) => {
     var otherUser = interaction.options.getMember(otherUserOptionName);
     var cuteRole = interaction.member.guild.roles.cache.find(role => role.name === "CERTIFIED CUTIE PANTS");

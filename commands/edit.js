@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, Client, Interaction } from "discord.js";
 
 const prevFirstNameOptionName = "prev-first-name";
 const prevLastNameOptionName = "prev-last-name";
@@ -71,6 +71,10 @@ let EditCommand = {
         .setName(rpRaceOptionName)
         .setDescription("[Optional] Your character's new RP race (if it differs from the in-game race)")
   ),
+  /**
+   * @param {Interaction} interaction
+   * @param {Client} client
+   */
   execute: async(interaction, client) => {
     const prevFirstName = interaction.options.getString(prevFirstNameOptionName);
     const prevLastName = interaction.options.getString(prevLastNameOptionName);

@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, Client, Interaction } from "discord.js";
 
 const messageIdOptionName = "message-id";
 const badWordOptionName = "bad-word";
@@ -17,6 +17,10 @@ let SpankCommand = {
     .setDescription("The bad word")
     .setRequired(true)
   ),
+  /**
+   * @param {Interaction} interaction
+   * @param {Client} client
+   */
   execute: async(interaction, client) => {
     if (!interaction.member.roles.cache.some(role => role.id == 1162636141325996032)) {
       await interaction.reply({content: `Only moderators can spank!`, ephemeral: true});

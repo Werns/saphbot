@@ -1,3 +1,9 @@
+import { Client, GuildMember } from "discord.js";
+
+/**
+ * @param {Client} client
+ * @param {GuildMember} member
+ */
 export default async function WelcomeUser(client, member) {
     let initialRoles = ["Newbie"];
     

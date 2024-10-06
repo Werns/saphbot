@@ -1,3 +1,9 @@
+import { Client, GuildMember, PartialGuildMember } from "discord.js";
+
+/**
+ * @param {Client} client
+ * @param {GuildMember | PartialGuildMember} member
+ */
 export default function GoodbyeUser(client, member) {
     let byebyeChannel = client.channels.cache.get('1249234768298508370');
     byebyeChannel.send(`**${member.user}** (${member.user.username}) just left the server. 😭`);

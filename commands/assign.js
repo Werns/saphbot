@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, Client, Interaction } from "discord.js";
 
 const firstNameOptionName = "first-name";
 const lastNameOptionName = "last-name";
@@ -58,6 +58,10 @@ let AssignCommand = {
         .setName(rpRaceOptionName)
         .setDescription("[Optional] Your character's RP race (if it differs from the in-game race)")
   ),
+  /**
+   * @param {Interaction} interaction
+   * @param {Client} client
+   */
   execute: async(interaction, client) => {
     const firstName = interaction.options.getString(firstNameOptionName);
     const lastName = interaction.options.getString(lastNameOptionName);
@@ -66,7 +70,7 @@ let AssignCommand = {
     const server = interaction.options.getString(serverOptionName);
     
     let rpValues = [];
-    
+
     const rpName = interaction.options.getString(rpNameOptionName);
     const rpNameDisplay = (rpName == null || rpName.trim().length < 1) ? "" : `name: *${rpName.trim()}*`;
     if (rpNameDisplay.length > 0) rpValues.push(rpNameDisplay);
