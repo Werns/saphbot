@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, Client, Interaction } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 
 const prevFirstNameOptionName = "prev-first-name";
 const prevLastNameOptionName = "prev-last-name";
@@ -72,10 +72,12 @@ let EditCommand = {
         .setDescription("[Optional] Your character's new RP race (if it differs from the in-game race)")
   ),
   /**
-   * @param {Interaction} interaction
-   * @param {Client} client
+   * @param {import("discord.js").ChatInputCommandInteraction} interaction
+   * @param {import("discord.js").Client} client
    */
   execute: async(interaction, client) => {
+    if (!interaction.member || !interaction.channel) return;
+
     const prevFirstName = interaction.options.getString(prevFirstNameOptionName);
     const prevLastName = interaction.options.getString(prevLastNameOptionName);
     
@@ -122,7 +124,8 @@ let EditCommand = {
     
     const newContent = `${interaction.member.toString()} plays as **${firstName} ${lastName}** (*${sex} ${race}, ${server}*)${rpDisplay}`;
 
-    await prevMessages.first().edit(newContent);
+    let prevMessage = prevMessages.first();
+    if (prevMessage) await prevMessage.edit(newContent);
     
     await interaction.reply({
       content: `Previous character assignment edited!`,

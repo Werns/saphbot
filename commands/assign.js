@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, Client, Interaction } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 
 const firstNameOptionName = "first-name";
 const lastNameOptionName = "last-name";
@@ -59,10 +59,12 @@ let AssignCommand = {
         .setDescription("[Optional] Your character's RP race (if it differs from the in-game race)")
   ),
   /**
-   * @param {Interaction} interaction
-   * @param {Client} client
+   * @param {import("discord.js").ChatInputCommandInteraction} interaction
+   * @param {import("discord.js").Client} client
    */
   execute: async(interaction, client) => {
+    if (!interaction.member) return;
+
     const firstName = interaction.options.getString(firstNameOptionName);
     const lastName = interaction.options.getString(lastNameOptionName);
     const sex = interaction.options.getString(sexOptionName);
@@ -89,7 +91,10 @@ let AssignCommand = {
     
     const rpDisplay = rpValues.length > 1 ? `\n**RP:** ${rpValues.join('; ')}` : rpValues.length > 0 ? `\n**RP:** ${rpValues[0]}` : ``;
     
-    var role = interaction.member.guild.roles.cache.find(role => role.name === "Character Assigned");
+    var role = interaction.member
+      //@ts-ignore
+      .guild
+      .roles.cache.find(role => role.name === "Character Assigned");
     if (!role) {
       await interaction.reply({
         content: `Unable to assign role, please inform Saphy`,
@@ -97,7 +102,9 @@ let AssignCommand = {
       });
       return;
     } else {
-      interaction.member.roles.add(role);
+      interaction.member.roles
+        //@ts-ignore
+        .add(role);
     }
     
     await interaction.reply({

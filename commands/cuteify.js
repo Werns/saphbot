@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, Client, Interaction } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 
 const otherUserOptionName = "other-user";
 
@@ -12,12 +12,17 @@ let CuteifyCommand = {
     .setRequired(true)
   ),
   /**
-   * @param {Interaction} interaction
-   * @param {Client} client
+   * @param {import("discord.js").ChatInputCommandInteraction} interaction
+   * @param {import("discord.js").Client} client
    */
   execute: async(interaction, client) => {
+    if (!interaction.member) return;
+
     var otherUser = interaction.options.getMember(otherUserOptionName);
-    var cuteRole = interaction.member.guild.roles.cache.find(role => role.name === "CERTIFIED CUTIE PANTS");
+    var cuteRole = interaction.member
+      //@ts-ignore
+      .guild
+      .roles.cache.find(role => role.name === "CERTIFIED CUTIE PANTS");
     
     if (!cuteRole || !otherUser) {
       await interaction.reply({
@@ -25,10 +30,15 @@ let CuteifyCommand = {
         ephemeral: false
       });
     } else {
-      var omitRole = otherUser.roles.cache.find(role => role.name === "Not Cute");
+      var omitRole = otherUser.roles
+        //@ts-ignore
+        .cache
+        .find(role => role.name === "Not Cute");
       
       if (!omitRole) {
-        otherUser.roles.add(cuteRole);
+        otherUser.roles
+          //@ts-ignore
+          .add(cuteRole);
       }
       
       await interaction.reply({

@@ -22,18 +22,16 @@ const client = new Client({ intents: [
   GatewayIntentBits.MessageContent
 ]});
 
-let commands = [AssignCommand, EditCommand, CuteifyCommand, UncuteifyCommand, PingCommand, SpankCommand];
+let commands = new Collection();
+for (let cmd of [AssignCommand, EditCommand, CuteifyCommand, UncuteifyCommand, PingCommand, SpankCommand]) commands.set(cmd.data.name, cmd);
 
-client.commands = new Collection();
-for (let cmd of commands) client.commands.set(cmd.data.name, cmd);
-
-client.once(Events.ClientReady, () => console.log(`Client logged in as ${client.user.tag}`));
+client.once(Events.ClientReady, () => console.log(`Client logged in as ${client.user?.tag}`));
 
 client.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isChatInputCommand()) return;
   
-  const command = client.commands.get(interaction.commandName);
-  
+  const command = commands.get(interaction.commandName);
+
   if (!command) {
     console.error(`No command matching ${interaction.commandName} was found.`);
     return;
@@ -80,12 +78,17 @@ const globalCommands = [];
 
 async function start() {
   try {
+    //@ts-ignore
     const rest = new REST().setToken(process.env.DISCORD_TOKEN);
     
+    // @ts-ignore
     const guildCommandResults = await rest.put(Routes.applicationGuildCommands(process.env.APPLICATION_ID, process.env.GUILD_ID), { body: guildCommands });
+    // @ts-ignore
     if (guildCommandResults.length > 0) console.log(`Successfully reloaded ${guildCommandResults.length} guild application (/) commands.`);
     
+    // @ts-ignore
     const globalCommandResults = await rest.put(Routes.applicationCommands(process.env.APPLICATION_ID), { body: globalCommands });
+    // @ts-ignore
     if (globalCommandResults.length > 0) console.log(`Successfully reloaded ${globalCommandResults.length} global application (/) commands.`);
     
     client.login(process.env.DISCORD_TOKEN);

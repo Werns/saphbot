@@ -1,5 +1,3 @@
-import { Client, OmitPartialGroupDMChannel, Message, PartialMessage } from "discord.js";
-
 export const BANNED_WORDS = [
     "nigger",
     "nigga",
@@ -19,8 +17,8 @@ export const BANNED_WORDS = [
   ];
   
   /**
-   * @param {Client} client
-   * @param {OmitPartialGroupDMChannel<Message<boolean>>} message
+   * @param {import("discord.js").Client} client
+   * @param {import("discord.js").OmitPartialGroupDMChannel<import("discord.js").Message<boolean>>} message
    */
   export async function blacklistMessageCreate(client, message) {
     await checkMessageContent(client, message);
@@ -28,41 +26,49 @@ export const BANNED_WORDS = [
   }
   
   /**
-   * @param {Client} client
-   * @param {Message<boolean> | PartialMessage} oldMessage
-   * @param {Message<boolean> | PartialMessage} newMessage
+   * @param {import("discord.js").Client} client
+   * @param {import("discord.js").Message<boolean> | import("discord.js").PartialMessage} oldMessage
+   * @param {import("discord.js").Message<boolean> | import("discord.js").PartialMessage} newMessage
    */
   export async function blacklistMessageUpdate(client, oldMessage, newMessage) {
     await checkMessageContent(client, newMessage);
   }
   
   /**
-   * @param {Client} client
-   * @param {OmitPartialGroupDMChannel<Message<boolean>> | Message<boolean> | PartialMessage} message
+   * @param {import("discord.js").Client} client
+   * @param {import("discord.js").OmitPartialGroupDMChannel<import("discord.js").Message<boolean>> | import("discord.js").Message<boolean> | import("discord.js").PartialMessage} message
    */
   async function checkMessageContent(client, message) {
-    if (message.author.bot) return false;
+    if (!message.content || !message.author || message.author.bot) return false;
 
     let reportLogChannel = client.channels.cache.get('1162638491759415376');
     
     for (let badWord of BANNED_WORDS) {
       if (message.content.toLowerCase().includes(badWord.toLowerCase())) {
-        await reportLogChannel.send(`Spanking ${message.author.username} for sending the bad word '${badWord}'`);
+        if (reportLogChannel) await reportLogChannel
+          //@ts-ignore
+          .send(
+          `Spanking ${message.author.username} for sending the bad word '${badWord}'`);
         await message.reply(`Spanking ${message.author.toString()} for sending a bad word!`);
         try {
-          let dm = await message.member.createDM();
-          await dm.send(`Your message was deleted from ${message.channel.toString()} because it contains '${badWord}':\n${message.content}`);
-        } catch { await reportLogChannel.send(`Unable to DM ${message.author.toString()} with explanation`); }
+          let dm = await message.member?.createDM();
+          if (dm) await dm.send(`Your message was deleted from ${message.channel.toString()} because it contains '${badWord}':\n${message.content}`);
+          else throw null;
+        } catch { if (reportLogChannel) await reportLogChannel
+          //@ts-ignore
+          .send(
+          `Unable to DM ${message.author.toString()} with explanation`);
+        }
         await message.delete();
       }
     }
   }
 
   /**
-   * @param {Client} client
-   * @param {OmitPartialGroupDMChannel<Message<boolean>>} message
+   * @param {import("discord.js").Client} client
+   * @param {import("discord.js").OmitPartialGroupDMChannel<import("discord.js").Message<boolean>>} message
    */
-  async function checkMessageChannel(client, message, reportLogChannel) {
+  async function checkMessageChannel(client, message) {
     if (message.author.bot) return false;
 
     let reportLogChannel = client.channels.cache.get('1162638491759415376');
@@ -71,10 +77,14 @@ export const BANNED_WORDS = [
       if (message.attachments.size < 1 && message.embeds.length < 1 && !message.hasThread && !message.content.toLocaleLowerCase().includes("http")) {
         //await reportLogChannel.send(`${message.author.toString()} sent a text-only message in ${message.channel.toString()}`);
         try {
-          let dm = await message.member.createDM();
-          await dm.send(`Your message was deleted from ${message.channel.toString()} because that channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.\n\nThis bot's detection is not perfect and may delete posts that it shouldn't:\n* If you created a thread, you can ignore this message - sometimes Discord will create a text post in the channel when you create a thread and sometimes it won't. This bot is not smart enough (yet) to differentiate between that and real text posts.\n\nYour message:\n${message.content}`);
+          let dm = await message.member?.createDM();
+          if (dm) await dm.send(`Your message was deleted from ${message.channel.toString()} because that channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.\n\nThis bot's detection is not perfect and may delete posts that it shouldn't:\n* If you created a thread, you can ignore this message - sometimes Discord will create a text post in the channel when you create a thread and sometimes it won't. This bot is not smart enough (yet) to differentiate between that and real text posts.\n\nYour message:\n${message.content}`);
+          else throw null;
         } catch {
-          await reportLogChannel.send(`Unable to DM ${message.author.toString()} with explanation`);
+          if (reportLogChannel) await reportLogChannel
+            //@ts-ignore
+            .send(
+            `Unable to DM ${message.author.toString()} with explanation`);
           await message.reply(`This channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.`);
         }
         await message.delete();

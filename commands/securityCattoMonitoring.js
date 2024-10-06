@@ -1,8 +1,8 @@
-import { Client, Presence, PresenceUpdateStatus } from "discord.js";
+import { PresenceUpdateStatus } from "discord.js";
 
 /**
- * @param {Client} client 
- * @param {Presence} presence 
+ * @param {import("discord.js").Client} client
+ * @param {import("discord.js").Presence} presence
  */
 export default function monitorSecurityCattoPresence(client, presence) {
     const securityCamsChannelId = "1082100597513269248";
@@ -11,6 +11,10 @@ export default function monitorSecurityCattoPresence(client, presence) {
     if (presence.userId.toLowerCase() == securityCattoBotId && presence.status !== PresenceUpdateStatus.Online) {
         let me = client.users.cache.get("114463729218748424");
         let securityCamsChannel = client.channels.cache.get(securityCamsChannelId);
-        securityCamsChannel.send(`${me.toString()}, Security Catto has gone offline!`);
+        if (securityCamsChannel)
+        securityCamsChannel
+            // @ts-ignore
+            .send(
+            `${me?.toString()}, Security Catto has gone offline!`);
     }
 }
