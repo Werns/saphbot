@@ -25,6 +25,6 @@ export default async function WelcomeUser(client, member) {
     gettingStartedChannel
       // @ts-ignore
       .send(
-      `Hey ${member.user.toString()}, welcome to Harvestbell! \n\nGo use the \`/assign\` command in ${assignCharactersChannel.toString()} for each alt that you will play as in the lounge. (The required fields indicate your character's in-game values, not RP values.) \n\nAlso, you can customize your name color and label yourself appropriately (optional) in ${selfAssignRolesChannel.toString()} \n\nOnce you're done with those, head on over to chat in ${teaRoomChannel.toString()} \n\nAlso, for transparency sake, you will probably see an AFK character at the lounge called Security Catto. That is from a free trial account owned by Saphy and it logs the chat history to a channel in this server for moderation purposes. The channel is only accessible to moderators and a small selection of trusted regulars (people with the \`@Regular\` role).`
+      `Hey ${member.user.toString()}, welcome to Harvestbell! \n\nGo use the \`/assign\` command in ${assignCharactersChannel.toString()} for each alt that you will play as in the lounge. (The required fields indicate your character's in-game values, not RP values.) \n\nAlso, you can customize your name color and label yourself appropriately (optional) in ${selfAssignRolesChannel.toString()} \n\nOnce you're done with those, head on over to chat in ${teaRoomChannel.toString()}`
     );
   }
