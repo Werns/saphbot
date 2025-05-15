@@ -8,7 +8,6 @@ import PingCommand from "./commands/ping.js";
 import SpankCommand from "./commands/spank.js";
 import WelcomeUser from "./commands/welcome.js";
 import GoodbyeUser from "./commands/goodbye.js";
-import monitorSecurityCattoPresence from './commands/securityCattoMonitoring.js';
 import { blacklistMessageCreate, blacklistMessageUpdate } from "./commands/blacklist.js";
 
 console.log("Starting SaphBot");
