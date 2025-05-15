@@ -75,7 +75,7 @@ export const BANNED_WORDS = [
     const messageDoesNotHaveAttachments = message.attachments.size < 1;
     const messageDoesNotHaveEmbeds = message.embeds.length < 1;
     const messageDoesNotHaveUrl = !message.content.toLocaleLowerCase().includes("http");
-    const messageIsNotReference = !message.reference?.messageId;
+    const messageIsNotReference = !message.reference;
 
     const deleteMessage = channelBanned && messageDoesNotHaveAttachments && messageDoesNotHaveEmbeds && !message.hasThread && messageDoesNotHaveUrl && messageIsNotReference;
     if (!deleteMessage) return;
