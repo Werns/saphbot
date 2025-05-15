@@ -84,7 +84,7 @@ export const BANNED_WORDS = [
     //await reportLogChannel.send(`${message.author.toString()} sent a text-only message in ${message.channel.toString()}`);
     try {
       let dm = await message.member?.createDM();
-      if (dm) await dm.send(`Your message was deleted from ${message.channel.toString()} because that channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.\n\nThis bot's detection is not perfect and may delete posts that it shouldn't:\n* If you created a thread, you can ignore this message - sometimes Discord will create a text post in the channel when you create a thread and sometimes it won't. This bot is not smart enough (yet) to differentiate between that and real text posts.\n\nYour message:\n${message.content}`);
+      if (dm) await dm.send(`Your message was deleted from ${message.channel.toString()} because that channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.\n\nYour message:\n${message.content}`);
       else throw null;
     } catch {
       var replied = await message.reply(`This channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.`);
