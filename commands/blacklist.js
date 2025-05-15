@@ -70,25 +70,29 @@ export const BANNED_WORDS = [
   async function checkMessageChannel(client, message) {
     if (message.author.bot) return false;
 
-    let reportLogChannel = client.channels.cache.get('1162638491759415376');
+    const reportLogChannel = client.channels.cache.get('1162638491759415376');
+    const channelBanned = BANNED_CHANNELS.includes(message.channelId.toString());
+    const messageDoesNotHaveAttachments = message.attachments.size < 1;
+    const messageDoesNotHaveEmbeds = message.embeds.length < 1;
+    const messageDoesNotHaveUrl = !message.content.toLocaleLowerCase().includes("http");
+    const messageIsNotReference = !message.reference?.messageId;
+
+    const deleteMessage = channelBanned && messageDoesNotHaveAttachments && messageDoesNotHaveEmbeds && !message.hasThread && messageDoesNotHaveUrl && messageIsNotReference;
+    if (!deleteMessage) return;
     
-    if (BANNED_CHANNELS.includes(message.channelId.toString())) {
-      if (message.attachments.size < 1 && message.embeds.length < 1 && !message.hasThread && !message.content.toLocaleLowerCase().includes("http")) {
-        console.log(message);
-        //await reportLogChannel.send(`${message.author.toString()} sent a text-only message in ${message.channel.toString()}`);
-        try {
-          let dm = await message.member?.createDM();
-          if (dm) await dm.send(`Your message was deleted from ${message.channel.toString()} because that channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.\n\nThis bot's detection is not perfect and may delete posts that it shouldn't:\n* If you created a thread, you can ignore this message - sometimes Discord will create a text post in the channel when you create a thread and sometimes it won't. This bot is not smart enough (yet) to differentiate between that and real text posts.\n\nYour message:\n${message.content}`);
-          else throw null;
-        } catch {
-          var replied = await message.reply(`This channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.`);
-          if (!replied && reportLogChannel) {
-            await reportLogChannel
-            //@ts-ignore
-            .send(`Unable to DM ${message.author.toString()} with explanation`);
-          }
-        }
-        await message.delete();
+    console.log(message);
+    //await reportLogChannel.send(`${message.author.toString()} sent a text-only message in ${message.channel.toString()}`);
+    try {
+      let dm = await message.member?.createDM();
+      if (dm) await dm.send(`Your message was deleted from ${message.channel.toString()} because that channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.\n\nThis bot's detection is not perfect and may delete posts that it shouldn't:\n* If you created a thread, you can ignore this message - sometimes Discord will create a text post in the channel when you create a thread and sometimes it won't. This bot is not smart enough (yet) to differentiate between that and real text posts.\n\nYour message:\n${message.content}`);
+      else throw null;
+    } catch {
+      var replied = await message.reply(`This channel is only for sharing images. If you'd like to talk about an image, please create a thread or use a different channel.`);
+      if (!replied && reportLogChannel) {
+        await reportLogChannel
+        //@ts-ignore
+        .send(`Unable to DM ${message.author.toString()} with explanation`);
       }
     }
+    await message.delete();
   }
