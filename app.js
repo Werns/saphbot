@@ -68,10 +68,6 @@ client.on(Events.GuildMemberRemove, (member) => {
   GoodbyeUser(client, member);
 });
 
-client.on(Events.PresenceUpdate, (oldPresence, newPresence) => {
-  monitorSecurityCattoPresence(client, newPresence);
-});
-
 const guildCommands = commands.map((cmd) => cmd.data.toJSON());
 
 const globalCommands = [];
