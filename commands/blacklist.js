@@ -7,7 +7,10 @@ export const BANNED_WORDS = [
     "bnnuy",
     "bnuuy",
     "bnuy",
-    "bunuy"
+    "bunuy",
+    "bnuny",
+    "bunnu",
+    "bynny"
   ];
   
   export const BANNED_CHANNELS = [
