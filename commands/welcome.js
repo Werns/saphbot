@@ -3,11 +3,14 @@
  * @param {import("discord.js").GuildMember} member
  */
 export default async function WelcomeUser(client, member) {
-    let initialRoles = ["Newbie"];
+    let initialRoles = ["Visitor"];
     
     for (let roleName of initialRoles) {
       var foundRole = member.guild.roles.cache.find(role => role.name === roleName);
       if (foundRole) member.roles.add(foundRole).catch(console.error);
+      else {
+        console.error(`Could not find role ${roleName}`);
+      }
     }
     
     await new Promise(r => setTimeout(r, 2000));
