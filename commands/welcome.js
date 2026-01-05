@@ -28,6 +28,6 @@ export default async function WelcomeUser(client, member) {
     gettingStartedChannel
       // @ts-ignore
       .send(
-      `Hey ${member.user.toString()}, welcome to Harvestbell! \n\nGo use the \`/assign\` command in ${assignCharactersChannel.toString()} for each alt that you will play as in the lounge. (The required fields indicate your character's in-game values, not RP values.) \n\nAlso, you can customize your name color and label yourself appropriately (optional) in ${selfAssignRolesChannel.toString()} \n\nOnce you're done with those, head on over to chat in ${teaRoomChannel.toString()}`
+      `Hey ${member.user.toString()}, welcome to Harvestbell! \n\n(Required) Harvestbell is an 18+ only server. Please verify your age to access the channels. \n\n(Optional) Use the \`/assign\` command in ${assignCharactersChannel.toString()} for each alt that you will play as in the lounge. (The required fields indicate your character's in-game values, not RP values.) \n\n(Optional) Customize your name color and label yourself appropriately (optional) in ${selfAssignRolesChannel.toString()} \n\nOnce you're done with those, head on over to chat in ${teaRoomChannel.toString()}`
     );
   }
